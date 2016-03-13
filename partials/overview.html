@@ -1,0 +1,7 @@
+<div class="container">
+	<div ng-show="loading">Loading...</div>
+	<div ng-show="error">Sorry, could not load details of (id) <b>{{details.id}}</b>. Please try again later.</div>
+	<div ng-show="!loading">
+		<h1>{{details.name}}</h1>
+	</div>
+</div>

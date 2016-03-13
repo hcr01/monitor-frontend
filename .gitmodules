@@ -1,0 +1,6 @@
+[submodule "static/libs/bootstrap"]
+	path = static/libs/bootstrap
+	url = https://github.com/components/bootstrap.git
+[submodule "static/libs/angular.js"]
+	path = static/libs/angular.js
+	url = https://github.com/components/angular.js.git
