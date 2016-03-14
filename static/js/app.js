@@ -1,78 +1,102 @@
+// init some vars
+// cach vars
+var cache = {};
+cache['list'] = [];
+cache['details'] = {};
+
+var APIHTTPPrefix = (settings['api']['encrypted'] ? "https://" : "http://") + settings['api']['prefix'];
+// init angular application
 var app = angular.module('app', [
 	'ngRoute'
 ]);
-var APIHTTPPrefix = (settings['api']['encrypted'] ? "https://" : "http://") + settings['api']['prefix'];
-app.config(['$routeProvider', '$locationProvider',
-	function($routeProvider, $locationProvider) {
-		$routeProvider
-			.when('/list', {
-				templateUrl: 'partials/list.html',
-				controller: 'listCtrl'
-			})
-			.when('/hcr/:id/overview', {
-				templateUrl: 'partials/overview.html',
-				controller: 'overviewCtrl'
-			})
-			.otherwise({
-				redirectTo: '/list'
-			});
+// create route provider
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+	$routeProvider
+		.when('/list', {
+			templateUrl: 'partials/list.html',
+			controller: 'listCtrl'
+		})
+		.when('/hcr/:id/:operation', {
+			templateUrl: 'partials/details.html',
+			controller: 'detailsCtrl'
+		})
+		.otherwise({
+			redirectTo: '/list'
+		});
 }]);
-
-app.factory('routeNavigation', function($route, $location) {
-	var routes = [];
-	angular.forEach($route.routes, function (route, path) {
-		if (route.name) {
-			routes.push({
-				path: path,
-				name: route.name
-			});
-		}
-	});
-	return {
-		routes: routes,
-		activeRoute: function (route) {
-			return route.path === $location.path();
-		}
-	};
-});
-
-app.directive('navigation', function (routeNavigation) {
+// navigation directive
+app.directive('navigation', function () {
 	return {
 		restrict: "E",
 		templateUrl: "partials/navigation.html",
-		controllerAs: "navCtrl",
-		controller: function ($scope) {
-			$scope.showMobileNav = false;
-			$scope.routes = routeNavigation.routes;
-			$scope.activeRoute = routeNavigation.activeRoute;
-		}
 	};
 });
-
+// create the list on /list
 app.controller('listCtrl', function ($scope, $http) {
 	$scope.loading = true;
 	$scope.error = false;
 	$scope.hcrs = [];
-	$http.get(APIHTTPPrefix + settings['api']['schema']['list'])
-	.then(function successCallback (response) {
-		$scope.hcrs = response.data;
+	if (cache['list'].length == 0) {
+		$http.get(APIHTTPPrefix + settings['api']['schema']['list'])
+		.then(function successCallback (response) {
+			$scope.hcrs = response.data;
+			cache['list'] = response.data;
+			$scope.loading = false;
+		}, function errorCallback(response) {
+			$scope.error = true;
+			$scope.loading = false;
+		});
+	} else {
+		$scope.hcrs = cache['list'];
 		$scope.loading = false;
-	}, function errorCallback(response) {
-		$scope.error = true;
-		$scope.loading = false;
-	});
+	}
 });
-app.controller('overviewCtrl', function($scope, $routeParams, $http) {
+// tabs and structure of details
+app.controller('detailsCtrl', function($scope, $routeParams, $http) {
+	$scope.id = $routeParams.id;
+	$scope.tabs = [
+		{
+			"operation":"overview",
+			"name":"Overview"
+		},{
+			"operation":"charts",
+			"name":"Charts"
+		},
+	];
+	$scope.activeTab = function (operation) {
+		return operation === $routeParams.operation;
+	}
 	$scope.loading = true;
 	$scope.error = false;
 	$scope.details = {};
-	$scope.details['id'] = $routeParams.id;
-	$http.get(APIHTTPPrefix + settings['api']['schema']['details'].replace(/{id}/i,$routeParams.id))
-	.then(function successCallback (response) {
-		$scope.details = response.data;
+	if (cache['details'][$routeParams.id] == undefined) {
+		$http.get(APIHTTPPrefix + settings['api']['schema']['details'].replace(/{id}/i,$routeParams.id))
+		.then(function successCallback (response) {
+			$scope.details = response.data;
+			cache['details'][$routeParams.id] = response.data;
+			$scope.loading = false;
+		}, function errorCallback(response) {
+			$scope.error = true;
+			$scope.loading = false;
+		});
+	} else {
+		$scope.details = cache['details'][$routeParams.id];
 		$scope.loading = false;
-	}, function errorCallback(response) {
-		$scope.error = true;
-		$scope.loading = false;
-	});
+	}
 });
+app.directive('tabsOverview', function () {
+	return {
+		templateUrl: "partials/overview.html",
+		controller: function ($scope) {
+			// controller of overview
+		}
+	}
+})
+app.directive('tabsCharts', function () {
+	return {
+		templateUrl: "partials/charts.html",
+		controller: function ($scope) {
+			// controller of overview
+		}
+	}
+})

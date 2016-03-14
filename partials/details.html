@@ -1,0 +1,11 @@
+<div class="container">
+	<div ng-show="loading">Loading...</div>
+	<div ng-show="error">Sorry, could not load details of (id) <b>{{details.id}}</b>. Please try again later.</div>
+	<h1>{{details.name}}</h1>
+	<ul class="nav nav-tabs">
+		<li ng-repeat="tab in tabs" role="presentation" ng-class="{active: activeTab(tab.operation)}"><a href="#/hcr/{{id}}/{{tab.operation}}">{{tab.name}}</a></li>
+	</ul>
+	<br />
+	<tabs-overview ng-show="activeTab('overview')"></tabs-overview>
+	<tabs-charts ng-show="activeTab('charts')"></tabs-overview>
+</div>

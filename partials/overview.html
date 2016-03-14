@@ -1,7 +1,28 @@
-<div class="container">
-	<div ng-show="loading">Loading...</div>
-	<div ng-show="error">Sorry, could not load details of (id) <b>{{details.id}}</b>. Please try again later.</div>
-	<div ng-show="!loading">
-		<h1>{{details.name}}</h1>
-	</div>
+<div>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Property</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>ID</td>
+				<td>{{details.id}}</td>
+			</tr>
+			<tr>
+				<td>Name</td>
+				<td>{{details.name}}</td>
+			</tr>
+			<tr>
+				<td>Owner</td>
+				<td>{{details.owner}}</td>
+			</tr>
+			<tr>
+				<td>Position</td>
+				<td>{{details.position}}</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
