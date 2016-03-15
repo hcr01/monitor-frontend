@@ -24,13 +24,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 			redirectTo: '/list'
 		});
 }]);
-// navigation directive
-app.directive('navigation', function () {
-	return {
-		restrict: "E",
-		templateUrl: "partials/navigation.html",
-	};
-});
 // create the list on /list
 app.controller('listCtrl', function ($scope, $http) {
 	$scope.loading = true;
