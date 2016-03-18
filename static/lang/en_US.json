@@ -1,0 +1,15 @@
+{
+	"list_of_hcr01_headline":"List of hybrid charge controllers:",
+	"search":"Search...",
+	"back_to_list":"Back to hcr01 list",
+	"tab_overview":"Overview",
+	"tab_realtime":"Real time",
+	"tab_charts":"Charts",
+	"tab_overview_table_id":"id",
+	"tab_overview_table_name":"name",
+	"tab_overview_table_owner":"owner",
+	"tab_overview_table_position":"position",
+	"loading":"loading...",
+	"error_list":"Sorry, could not load the list of hcr01's. Please try again later.",
+	"error_details":"Sorry, could not load details. Please try again later."
+}

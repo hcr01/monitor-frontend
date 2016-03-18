@@ -5,10 +5,11 @@ cache['list'] = [];
 cache['details'] = {};
 // init angular application
 var app = angular.module('app', [
-	'ngRoute'
+	'ngRoute',
+	'pascalprecht.translate'
 ]);
 // create route provider
-app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+app.config(function($routeProvider, $locationProvider, $translateProvider) {
 	$routeProvider
 		.when('/list', {
 			templateUrl: 'partials/list.html',
@@ -21,7 +22,23 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 		.otherwise({
 			redirectTo: '/list'
 		});
-}]);
+	$translateProvider.preferredLanguage(settings['preferredLanguage']);
+	$translateProvider.useStaticFilesLoader({
+		prefix: 'static/lang/',
+		suffix: '.json'
+	});
+});
+app.run(function ($translate) {
+	// try to detect the browser language
+	var browserLang = navigator.language || navigator.userLanguage;
+	settings['languages'].forEach(function (obj){
+		browserLang.split("-").forEach(function (part){
+			if (obj.indexOf(part) !=-1) {
+				$translate.use(obj);
+			}
+		});
+	})
+})
 // create the list on /list
 app.controller('listCtrl', function ($scope, $http) {
 	$scope.loading = true;
@@ -48,19 +65,16 @@ app.controller('detailsCtrl', function($scope, $routeParams, $http) {
 	// tabs definition
 	$scope.tabs = [
 		{
-			"operation":"overview",
-			"name":"Overview"
+			"name":"overview"
 		},{
-			"operation":"realtime",
-			"name":"Realtime"
+			"name":"realtime"
 		},{
-			"operation":"charts",
-			"name":"Charts"
+			"name":"charts"
 		}
 	];
 	// function used at the tab selector
-	$scope.activeTab = function (operation) {
-		return operation == $routeParams.operation;
+	$scope.activeTab = function (name) {
+		return name == $routeParams.operation;
 	}
 	// set default status
 	$scope.loading = true;

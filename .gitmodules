@@ -4,3 +4,9 @@
 [submodule "static/libs/angular.js"]
 	path = static/libs/angular.js
 	url = https://github.com/components/angular.js.git
+[submodule "static/libs/angular-translate"]
+	path = static/libs/angular-translate
+	url = https://github.com/angular-translate/bower-angular-translate.git
+[submodule "static/libs/angular-translate-loader-static-files"]
+	path = static/libs/angular-translate-loader-static-files
+	url = https://github.com/angular-translate/bower-angular-translate-loader-static-files.git

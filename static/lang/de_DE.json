@@ -1,0 +1,15 @@
+{
+	"list_of_hcr01_headline":"Liste aller Laderegler:",
+	"search":"Suchen...",
+	"back_to_list":"hcr01 Liste",
+	"tab_overview":"Übersicht",
+	"tab_realtime":"Realtime",
+	"tab_charts":"Diagramme",
+	"tab_overview_table_id":"ID",
+	"tab_overview_table_name":"Name",
+	"tab_overview_table_owner":"Besitzer",
+	"tab_overview_table_position":"Position",
+	"loading":"Laden...",
+	"error_list":"Konnte die Liste der Laderegler nicht laden. Bitte versuche es später erneut.",
+	"error_details":"Konnte keine weiteren Details laden... Bitte versuche es später erneut."
+}

@@ -1,8 +1,8 @@
 <div class="container">
-	<h1>List of hybrid charge controllers:</h1>
-	<input type="text"class="form-control" placeholder="Search..." ng-model="filter" /><br />
-	<div ng-show="loading">Loading...</div>
-	<div ng-show="error">Sorry, could not load the list of hcr01's. Please try again later.</div>
+	<h1>{{'list_of_hcr01_headline' | translate}}</h1>
+	<input type="text"class="form-control" placeholder="{{'search' | translate}}" ng-model="filter" /><br />
+	<div ng-show="loading">{{'loading' | translate}}</div>
+	<div ng-show="error">{{'error_list' | translate}}</div>
 	<div class="list-group">
 		<a ng-repeat="hcr in hcrs | filter:filter" href="#/hcr/{{hcr.id}}/overview" class="list-group-item">
 			<b>{{hcr.name}}</b> - {{hcr.id}}
