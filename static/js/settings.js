@@ -1,10 +1,8 @@
 settings = {
 	"api":{
-		"encrypted":true,
-		"prefix":"api.hcr01.io/extern/monitor",
 		"schema":{
-			"list":"/hcrs",
-			"details":"/hcrs/{id}/details"
+			"list":"https://api.hcr01.io/extern/monitor/hcrs",
+			"details":"https://api.hcr01.io/extern/monitor/hcrs/{id}/details"
 		}
 	}
 }

@@ -3,8 +3,6 @@
 var cache = {};
 cache['list'] = [];
 cache['details'] = {};
-
-var APIHTTPPrefix = (settings['api']['encrypted'] ? "https://" : "http://") + settings['api']['prefix'];
 // init angular application
 var app = angular.module('app', [
 	'ngRoute'
@@ -30,7 +28,7 @@ app.controller('listCtrl', function ($scope, $http) {
 	$scope.error = false;
 	$scope.hcrs = [];
 	if (cache['list'].length == 0) {
-		$http.get(APIHTTPPrefix + settings['api']['schema']['list'])
+		$http.get(settings['api']['schema']['list'])
 		.then(function successCallback (response) {
 			$scope.hcrs = response.data;
 			cache['list'] = response.data;
@@ -47,23 +45,30 @@ app.controller('listCtrl', function ($scope, $http) {
 // tabs and structure of details
 app.controller('detailsCtrl', function($scope, $routeParams, $http) {
 	$scope.id = $routeParams.id;
+	// tabs definition
 	$scope.tabs = [
 		{
 			"operation":"overview",
 			"name":"Overview"
 		},{
+			"operation":"realtime",
+			"name":"Realtime"
+		},{
 			"operation":"charts",
 			"name":"Charts"
-		},
+		}
 	];
+	// function used at the tab selector
 	$scope.activeTab = function (operation) {
-		return operation === $routeParams.operation;
+		return operation == $routeParams.operation;
 	}
+	// set default status
 	$scope.loading = true;
 	$scope.error = false;
 	$scope.details = {};
+	// get the data (if not already downloaded) from the api server
 	if (cache['details'][$routeParams.id] == undefined) {
-		$http.get(APIHTTPPrefix + settings['api']['schema']['details'].replace(/{id}/i,$routeParams.id))
+		$http.get(settings['api']['schema']['details'].replace(/{id}/i,$routeParams.id))
 		.then(function successCallback (response) {
 			$scope.details = response.data;
 			cache['details'][$routeParams.id] = response.data;
@@ -77,6 +82,7 @@ app.controller('detailsCtrl', function($scope, $routeParams, $http) {
 		$scope.loading = false;
 	}
 });
+// directives
 app.directive('tabsOverview', function () {
 	return {
 		templateUrl: "partials/overview.html",
@@ -90,6 +96,14 @@ app.directive('tabsCharts', function () {
 		templateUrl: "partials/charts.html",
 		controller: function ($scope) {
 			// controller of overview
+		}
+	}
+})
+app.directive('tabsRealtime', function () {
+	return {
+		templateUrl: "partials/realtime.html",
+		controller: function ($scope) {
+			// controller of realtime
 		}
 	}
 })
