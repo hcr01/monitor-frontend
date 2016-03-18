@@ -22,6 +22,7 @@ app.config(function($routeProvider, $locationProvider, $translateProvider) {
 		.otherwise({
 			redirectTo: '/list'
 		});
+	// init translateProvider
 	$translateProvider.preferredLanguage(settings['preferredLanguage']);
 	$translateProvider.useStaticFilesLoader({
 		prefix: 'static/lang/',
