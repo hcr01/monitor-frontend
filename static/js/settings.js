@@ -1,3 +1,4 @@
+// The settings.js file contains the parameters of this website... You can change this as example for testing...
 settings = {
 	"api":{
 		"schema":{

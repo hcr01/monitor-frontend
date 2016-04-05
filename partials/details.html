@@ -1,4 +1,4 @@
-<div class="container">
+<div>
 	<div ng-show="loading">{{'loading' | translate}}</div>
 	<div ng-show="error">{{'error_details' | translate}}</div>
 	<div ng-show="!error">
@@ -8,9 +8,5 @@
 		<ul class="nav nav-tabs">
 			<li ng-repeat="tab in tabs" role="presentation" ng-class="{active: activeTab(tab.name)}"><a href="#/hcr/{{id}}/{{tab.name}}">{{'tab_'+tab.name | translate}}</a></li>
 		</ul>
-		<br />
-		<tabs-overview ng-show="activeTab('overview')"></tabs-overview>
-		<tabs-realtime ng-show="activeTab('realtime')"></tabs-realtime>
-		<tabs-charts ng-show="activeTab('charts')"></tabs-overview>
 	</div>
 </div>

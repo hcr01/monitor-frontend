@@ -1,22 +1,25 @@
-<div>
-	<table class="table table-striped">
-		<tbody>
-			<tr>
-				<td>{{'tab_overview_table_id' | translate}}</td>
-				<td>{{details.id}}</td>
-			</tr>
-			<tr>
-				<td>{{'tab_overview_table_name' | translate}}</td>
-				<td>{{details.name}}</td>
-			</tr>
-			<tr>
-				<td>{{'tab_overview_table_owner' | translate}}</td>
-				<td>{{details.owner}}</td>
-			</tr>
-			<tr>
-				<td>{{'tab_overview_table_position' | translate}}</td>
-				<td>{{details.position}}</td>
-			</tr>
-		</tbody>
-	</table>
+<div class="container">
+	<details-tabs></details-tabs>
+	<div ng-show="!error">
+		<table class="table table-striped">
+			<tbody>
+				<tr>
+					<td>{{'tab_overview_table_id' | translate}}</td>
+					<td>{{details.id}}</td>
+				</tr>
+				<tr>
+					<td>{{'tab_overview_table_name' | translate}}</td>
+					<td>{{details.name}}</td>
+				</tr>
+				<tr>
+					<td>{{'tab_overview_table_owner' | translate}}</td>
+					<td>{{details.owner}}</td>
+				</tr>
+				<tr>
+					<td>{{'tab_overview_table_position' | translate}}</td>
+					<td>{{details.position}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

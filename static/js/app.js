@@ -15,14 +15,23 @@ app.config(function($routeProvider, $locationProvider, $translateProvider) {
 			templateUrl: 'partials/list.html',
 			controller: 'listCtrl'
 		})
-		.when('/hcr/:id/:operation', {
-			templateUrl: 'partials/details.html',
-			controller: 'detailsCtrl'
+		.when('/hcr/:id/overview', {
+			templateUrl: 'partials/overview.html',
+			controller: 'overviewCtrl'
+		})
+		.when('/hcr/:id/charts', {
+			templateUrl: 'partials/charts.html',
+			controller: 'chartsCtrl'
+		})
+		.when('/hcr/:id/realtime', {
+			templateUrl: 'partials/realtime.html',
+			controller: 'realtimeCtrl'
 		})
 		.otherwise({
 			redirectTo: '/list'
 		});
 	// init translateProvider
+	// if detecting the browser language doesn't work, use the language of settings.js
 	$translateProvider.preferredLanguage(settings['preferredLanguage']);
 	$translateProvider.useStaticFilesLoader({
 		prefix: 'static/lang/',
@@ -60,65 +69,54 @@ app.controller('listCtrl', function ($scope, $http) {
 		$scope.loading = false;
 	}
 });
-// tabs and structure of details
-app.controller('detailsCtrl', function($scope, $routeParams, $http) {
-	$scope.id = $routeParams.id;
-	// tabs definition
-	$scope.tabs = [
-		{
-			"name":"overview"
-		},{
-			"name":"realtime"
-		},{
-			"name":"charts"
+app.controller("overviewCtrl", function($scope){
+	// controller @/hcr/{id}/overview
+});
+app.controller("realtimeCtrl", function($scope){
+	// controller @/hcr/{id}/realtime
+});
+app.controller("chartsCtrl", function($scope){
+	// controller @/hcr/{id}/charts
+});
+// tabs directive
+app.directive('detailsTabs', function() {
+	return {
+		templateUrl : 'partials/details.html',
+		controller : function($scope, $routeParams, $location, $http) {
+			$scope.id = $routeParams.id;
+			// tabs definition
+			$scope.tabs = [
+				{
+					"name":"overview"
+				},{
+					"name":"realtime"
+				},{
+					"name":"charts"
+				}
+			];
+			// function used at the tab selector
+			$scope.activeTab = function (name) {
+				return "/hcr/" + $routeParams.id + "/" + name == $location.path();
+			}
+			// set default status
+			$scope.loading = true;
+			$scope.error = false;
+			$scope.details = {};
+			// get the data (if not already downloaded) from the api server
+			if (cache['details'][$routeParams.id] == undefined) {
+				$http.get(settings['api']['schema']['details'].replace(/{id}/i,$routeParams.id))
+				.then(function successCallback (response) {
+					$scope.details = response.data;
+					cache['details'][$routeParams.id] = response.data;
+					$scope.loading = false;
+				}, function errorCallback(response) {
+					$scope.error = true;
+					$scope.loading = false;
+				});
+			} else {
+				$scope.details = cache['details'][$routeParams.id];
+				$scope.loading = false;
+			}
 		}
-	];
-	// function used at the tab selector
-	$scope.activeTab = function (name) {
-		return name == $routeParams.operation;
-	}
-	// set default status
-	$scope.loading = true;
-	$scope.error = false;
-	$scope.details = {};
-	// get the data (if not already downloaded) from the api server
-	if (cache['details'][$routeParams.id] == undefined) {
-		$http.get(settings['api']['schema']['details'].replace(/{id}/i,$routeParams.id))
-		.then(function successCallback (response) {
-			$scope.details = response.data;
-			cache['details'][$routeParams.id] = response.data;
-			$scope.loading = false;
-		}, function errorCallback(response) {
-			$scope.error = true;
-			$scope.loading = false;
-		});
-	} else {
-		$scope.details = cache['details'][$routeParams.id];
-		$scope.loading = false;
 	}
 });
-// directives
-app.directive('tabsOverview', function () {
-	return {
-		templateUrl: "partials/overview.html",
-		controller: function ($scope) {
-			// controller of overview
-		}
-	}
-})
-app.directive('tabsCharts', function () {
-	return {
-		templateUrl: "partials/charts.html",
-		controller: function ($scope) {
-			// controller of overview
-		}
-	}
-})
-app.directive('tabsRealtime', function () {
-	return {
-		templateUrl: "partials/realtime.html",
-		controller: function ($scope) {
-			// controller of realtime
-		}
-	}
-})
