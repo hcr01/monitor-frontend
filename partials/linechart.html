@@ -1,0 +1,20 @@
+<div>
+	<svg ng-attr-width="{{data.width}}" ng-attr-height="{{data.height}}" style="border: 1px solid;">
+		<!-- headline -->
+		<text ng-attr-x="{{data.width / 2}}" ng-attr-y="{{margin / 2}}" fill="black" text-anchor="middle" font-size="12">{{data.title}}</text>
+		<g ng-attr-transform="translate({{margin}},{{margin}})">
+			<!-- X/Y lines (axis) -->
+			<line ng-attr-y1="{{height}}" x1="0" x2="0" y2="0" stroke="black" />
+			<line ng-attr-y1="{{height}}" ng-attr-x2="{{width}}" ng-attr-y2="{{height}}" x1="0" stroke="black" />
+			<!-- X axis labels -->
+			<line ng-repeat="tick in data.legend" ng-attr-x1="{{(width) / (data.legend.length - 1) * $index}}" ng-attr-y1="{{height}}" ng-attr-x2="{{(width) / (data.legend.length - 1) * $index}}" ng-attr-y2="{{height + 6}}" stroke="black" stroke-width="1" />
+			<text ng-repeat="tick in data.legend" ng-attr-x="{{(width) / (data.legend.length - 1) * $index}}" ng-attr-y="{{height + 18}}" fill="black" text-anchor="middle" font-size="12">{{tick}}</text>
+			<!-- Y axis labels -->
+			<line ng-repeat="tick in yticks" ng-attr-y1="{{getPointy(yticks, $index)}}" ng-attr-y2="{{getPointy(yticks, $index)}}" x1="-6" x2="0" stroke="black" stroke-width="1" />
+			<text ng-repeat="tick in yticks" ng-attr-x="{{(5 - margin)}}" ng-attr-y="{{getPointy(yticks, $index) + 4}}" fill="black" font-size="12">{{tick}}</text>
+			<!-- lines -->
+			<polyline ng-repeat="line in data.lines" ng-show="line.type == 'polyline' || line.type == undefined" ng-attr-stroke="{{line.color}}" ng-attr-points="{{getPoints(line.data)}}" stroke-width="2" fill="none" />
+			<path ng-repeat="line in data.lines" ng-show="line.type == 'path'" ng-attr-stroke="{{line.color}}" ng-attr-d="{{getPath(line.data)}}" stroke-width="{{line.stroke}}" fill="none" />
+		</g>
+	</svg>
+</div>

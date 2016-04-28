@@ -1,7 +1,7 @@
 <div>
 	<div ng-show="loading">{{'loading' | translate}}</div>
 	<div ng-show="error">{{'error_details' | translate}}</div>
-	<div ng-show="!error">
+	<div ng-show="!error && !loading">
 		<h1>{{details.name}}</h1>
 		<a href="#/list"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> {{'back_to_list' | translate}}</a>
 		<br /><br />
