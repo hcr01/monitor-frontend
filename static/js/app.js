@@ -146,10 +146,10 @@ app.directive("lineChart", function() {
 			$scope.init = function() {
 				console.log("drawing chart...")
 				$scope.margin = {
-					left: $scope.data.margin.left || ($scope.data.ylabel != undefined ? 50 : 30),
+					left: $scope.data.margin.left || 0,
 					right: $scope.data.margin.right || 30,
 					top: $scope.data.margin.top || 30,
-					bottom: $scope.data.margin.bottom || ($scope.data.xlabel != undefined ? 40 : 30),
+					bottom: $scope.data.margin.bottom || ($scope.data.xlabel != undefined ? 40 : 20),
 				};
 				$scope.height = $scope.data.height - ($scope.margin.top + $scope.margin.bottom);
 				$scope.width = $scope.data.width - ($scope.margin.left + $scope.margin.right);
@@ -199,6 +199,13 @@ app.directive("lineChart", function() {
 
 				for (i = tstart; i < tstop; i += step) {
 					$scope.yticks.push(i);
+					// adjust margin.left on the Y axis ticks label size
+					var newLeft = String(i).length * 6 + ($scope.data.ylabel != undefined ? 30 : 15);
+					if ($scope.margin.left < newLeft) {
+						$scope.margin.left = newLeft;
+						// calculate the width again
+						$scope.width = $scope.data.width - ($scope.margin.left + $scope.margin.right);
+					}
 				}
 			}
 			// listens to changes of directive parameters and redraws the chart if required
