@@ -78,17 +78,14 @@ app.controller("realtimeCtrl", function($scope){
 app.controller("chartsCtrl", function($scope){
 	// controller @/hcr/{id}/charts
 	$scope.data = {
-		legend: ["jan","feb","mar","apr","may"],
-		ymax: 40,
-		ymin: 0,
+		legend: ["Jan","Feb","Mar","Apr","May"],
 		xlabel: "time in months",
-		ylabel: "active in gramm",
+		ylabel: "active in gramms",
 		height: 300,
 		width: 600,
-		margin: 40,
 		title: "title",
 		lines:[{
-			data: [4,1,2,4,5,9,2,9,16,38,22,23,12],
+			data: [4,1,2,4,5,9,2,9,16,38,22,23,20],
 			color: "red",
 			stroke: "2"
 		}]
@@ -143,7 +140,11 @@ app.directive("lineChart", function() {
 			data: '=data'
 		},
 		controller: function ($scope) {
+			// if user doesn't set the margin, set it to {} to prevent errors
+			if ($scope.data.margin == undefined) $scope.data.margin = {};
+			// the init function; it sets lot's of vars which are needed do continue
 			$scope.init = function() {
+				console.log("drawing chart...")
 				$scope.margin = {
 					left: $scope.data.margin.left || ($scope.data.ylabel != undefined ? 50 : 30),
 					right: $scope.data.margin.right || 30,
@@ -152,9 +153,17 @@ app.directive("lineChart", function() {
 				};
 				$scope.height = $scope.data.height - ($scope.margin.top + $scope.margin.bottom);
 				$scope.width = $scope.data.width - ($scope.margin.left + $scope.margin.right);
-				$scope.ymin = $scope.data.ymin || 0;
-				$scope.ymax = $scope.data.ymax || 10; // TODO
 				$scope.ytickCount = $scope.data.ytickCount || $scope.height / 40;
+				$scope.ymin = $scope.data.ymin || 0;
+				$scope.ymax = $scope.data.ymax || 0;
+				if ($scope.data.ymin == undefined || $scope.data.ymax == undefined) {
+					$scope.data.lines.map(function(item) {
+						item.data.map(function(itemofitem) {
+							if ($scope.data.ymax == undefined && itemofitem > $scope.ymax) $scope.ymax = itemofitem;
+							if ($scope.data.ymin == undefined && itemofitem < $scope.ymin) $scope.ymin = itemofitem;
+						})
+					})
+				}
 				// init the y ticks...
 				$scope.calculateY()
 			}

@@ -6,7 +6,7 @@
 		<g ng-attr-transform="translate({{margin.left}},{{margin.top}})">
 			<!-- axis legend -->
 			<text ng-attr-x="{{0 - height / 2}}" ng-attr-y="{{0 - (margin.left - 12)}}" transform="rotate(-90)" text-anchor="middle" font-size="12">{{data.ylabel}}</text>
-			<text ng-attr-x="{{width / 2}}" ng-attr-y="{{margin.bottom + height}}" text-anchor="middle" font-size="12">{{data.xlabel}}</text>
+			<text ng-attr-x="{{width / 2}}" ng-attr-y="{{margin.bottom + height - 5}}" text-anchor="middle" font-size="12">{{data.xlabel}}</text>
 			<!-- X/Y lines (axis) -->
 			<line ng-attr-y1="{{height}}" x1="0" x2="0" y2="0" stroke="black" />
 			<line ng-attr-y1="{{height}}" ng-attr-x2="{{width}}" ng-attr-y2="{{height}}" x1="0" stroke="black" />
