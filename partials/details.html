@@ -6,7 +6,7 @@
 		<a href="#/list"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> {{'back_to_list' | translate}}</a>
 		<br /><br />
 		<ul class="nav nav-tabs">
-			<li ng-repeat="tab in tabs" role="presentation" ng-class="{active: activeTab(tab.name)}"><a href="#/hcr/{{id}}/{{tab.name}}">{{'tab_'+tab.name | translate}}</a></li>
+			<li ng-repeat="tab in tabs" role="presentation" ng-class="{active: activeTab(tab)}"><a href="#/hcr/{{id}}/{{tab}}">{{'tab_'+tab | translate}}</a></li>
 		</ul>
 	</div>
 </div>

@@ -37,6 +37,7 @@ app.config(function($routeProvider, $locationProvider, $translateProvider) {
 		prefix: 'static/lang/',
 		suffix: '.json'
 	});
+	$translateProvider.useSanitizeValueStrategy('escape');
 });
 app.run(function ($translate) {
 	// try to detect the browser language
@@ -98,15 +99,7 @@ app.directive('detailsTabs', function() {
 		controller : function($scope, $routeParams, $location, $http) {
 			$scope.id = $routeParams.id;
 			// tabs definition
-			$scope.tabs = [
-				{
-					"name":"overview"
-				},{
-					"name":"realtime"
-				},{
-					"name":"charts"
-				}
-			];
+			$scope.tabs = ["overview", "realtime", "charts"];
 			// function used at the tab selector
 			$scope.activeTab = function (name) {
 				return "/hcr/" + $routeParams.id + "/" + name == $location.path();
@@ -169,17 +162,17 @@ app.directive("lineChart", function() {
 			}
 			// converts from value to value in chart
 			$scope.getPointx = function (line, index) {
-				return $scope.width / (line.length - 1) * index;
+				return Math.round($scope.width / (line.length - 1) * index);
 			};
 			// the same with the y axis
-			$scope.getPointy = function (line, index) {
+			$scope.getPointy = function (point) {
 				var yFactor = $scope.height / Math.abs($scope.ymin - $scope.ymax)
-				return $scope.height + $scope.ymin * yFactor - line[index] * yFactor;
+				return Math.round($scope.height + $scope.ymin * yFactor - point * yFactor);
 			};
 			// converts array of one line to a svg <polyline points=""> readable string
 			$scope.getPoints = function (line) {
 				return line.map(function (item, itemIndex) {
-					return $scope.getPointx(line, itemIndex) + ',' + $scope.getPointy(line, itemIndex);
+					return $scope.getPointx(line, itemIndex) + ',' + $scope.getPointy(line[itemIndex]);
 				}).join(',');
 			};
 			// calculates smart y axis labels
@@ -193,12 +186,12 @@ app.directive("lineChart", function() {
 				else if (err <= 0.35) step *= 5;
 				else if (err <= 0.75) step *= 2;
 
-				var tstart = Math.ceil($scope.ymin / step) * step;
-				var tstop = Math.floor($scope.ymax / step) * step + step * 0.5;
+				var i = Math.ceil($scope.ymin / step) * step;
+				var max = Math.floor($scope.ymax / step) * step + step * 0.5;
 				$scope.yticks = [];
 
-				for (i = tstart; i < tstop; i += step) {
-					$scope.yticks.push(i);
+				while(i < max) {
+					$scope.yticks.push(Math.round(i));
 					// adjust margin.left on the Y axis ticks label size
 					var newLeft = String(i).length * 6 + ($scope.data.ylabel != undefined ? 30 : 15);
 					if ($scope.margin.left < newLeft) {
@@ -206,6 +199,17 @@ app.directive("lineChart", function() {
 						// calculate the width again
 						$scope.width = $scope.data.width - ($scope.margin.left + $scope.margin.right);
 					}
+					i = i + step;
+				}
+			}
+			// show zero line in the chart or not?
+			$scope.showZeroLine = function () {
+				if ($scope.data.showZeroLine == undefined) {
+					return ($scope.ymin < 0 && $scope.ymax > 0);
+				} else if ($scope.data.showZeroLine == false) {
+					return false;
+				} else if ($scope.data.showZeroLine == true) {
+					return true
 				}
 			}
 			// listens to changes of directive parameters and redraws the chart if required
