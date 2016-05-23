@@ -8,4 +8,4 @@ settings = {
 	},
 	"languages":["en_US", "de_DE"],
 	"preferredLanguage":"en_US"
-}
+};
