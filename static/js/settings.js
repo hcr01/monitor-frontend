@@ -2,8 +2,8 @@
 settings = {
 	"api":{
 		"schema":{
-			"list":"https://api.hcr01.io/extern/monitor/hcrs",
-			"details":"https://api.hcr01.io/extern/monitor/hcrs/{id}/details"
+			"list":"https://api.hcr01.io/v0.1/hcrs",
+			"details":"https://api.hcr01.io/v0.1/hcrs/{id}"
 		}
 	},
 	"languages":["en_US", "de_DE"],
